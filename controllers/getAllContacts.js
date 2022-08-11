@@ -1,12 +1,8 @@
-const getData = require("../services/dataLayer");
+const service = require("../services/contactsService");
 
-const getAllContacts = async (_, res, next) => {
-  try {
-    const result = await getData();
-    res.json({ result, message: "Success", status: 200 });
-  } catch (error) {
-    next(error);
-  }
+const getAllContactsController = async (_, res) => {
+  const contacts = await service.getContacts();
+  res.json({ contacts });
 };
 
-module.exports = getAllContacts;
+module.exports = getAllContactsController;
