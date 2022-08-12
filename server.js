@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const PORT = process.env.PORT;
 
 mongoose
-  .connect(process.env.MONGO_URL)
+  .connect(process.env.MONGO_URL, { dbName: "db-contacts" })
   .then(() => {
     app.listen(PORT);
     console.log(`Database connection successful on port: ${PORT}`);
