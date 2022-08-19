@@ -9,6 +9,8 @@ const updateContactStatusController = require("./contacts/updateContactStatus");
 // Auth
 const registrationController = require("./auth/registration");
 const loginController = require("./auth/login");
+const logoutController = require("./auth/logout");
+const getCurrentController = require("./auth/getCurrent");
 
 module.exports = {
   getAllContactsController,
@@ -19,4 +21,6 @@ module.exports = {
   updateContactStatusController,
   registrationController,
   loginController,
+  logoutController,
+  getCurrentController,
 };

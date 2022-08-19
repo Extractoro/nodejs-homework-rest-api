@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose");
 const bcrypt = require("bcrypt");
 
-const userSchema = new mongoose.Schema({
+const userSchema = Schema({
   password: {
     type: String,
     required: [true, "Set password for user"],
@@ -25,6 +25,6 @@ userSchema.pre("save", async function () {
   }
 });
 
-const User = mongoose.model("user", userSchema);
+const User = model("user", userSchema);
 
 module.exports = { User };

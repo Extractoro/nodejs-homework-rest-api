@@ -32,6 +32,8 @@ const login = async (email, password) => {
   const token = jwt.sign(
     {
       _id: user._id,
+      email: user.email,
+      subscription: user.subscription,
     },
     process.env.JWT_SECRET
   );
@@ -39,7 +41,13 @@ const login = async (email, password) => {
   return token;
 };
 
+const logout = async (userId) => {
+  const userLogout = await User.findByIdAndUpdate(userId, { token: "" });
+  return userLogout;
+};
+
 module.exports = {
   registration,
   login,
+  logout,
 };

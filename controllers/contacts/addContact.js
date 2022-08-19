@@ -6,9 +6,9 @@ const addContactController = async (req, res, next) => {
   if (error) {
     return res.json({ status: 400, message: "Missing fields" });
   }
-  const { _id } = req.user;
+  const { _id: owner } = req.user;
 
-  const result = await service.addContact(req.body, _id);
+  const result = await service.addContact(req.body, owner);
   res.status(201).json(result);
 };
 
