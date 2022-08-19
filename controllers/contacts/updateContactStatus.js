@@ -1,5 +1,5 @@
-const service = require("../services/contactsService");
-const { favouriteStatus } = require("../schema");
+const service = require("../../services/contactsService");
+const { favouriteStatus } = require("../../schema");
 
 const updateContactStatusController = async (req, res, next) => {
   const { error } = favouriteStatus.validate(req.body);

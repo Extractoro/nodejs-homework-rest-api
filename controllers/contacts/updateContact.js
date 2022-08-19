@@ -1,5 +1,5 @@
-const service = require("../services/contactsService");
-const { joiSchema } = require("../schema");
+const service = require("../../services/contactsService");
+const { joiSchema } = require("../../schema");
 
 const updateContactController = async (req, res, next) => {
   const { error } = joiSchema.validate(req.body);
