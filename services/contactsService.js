@@ -11,7 +11,7 @@ const getContactById = async (id) => {
 };
 
 const addContact = async (body, owner) => {
-  const result = new Contact({ body, owner });
+  const result = new Contact(body, owner);
   return result;
 };
 
