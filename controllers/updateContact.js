@@ -1,17 +1,14 @@
-const contacts = require("../models/contacts");
+const service = require("../services/contactsService");
 const { joiSchema } = require("../schema");
 
-const updateContact = async (req, res, next) => {
-  try {
-    const { error } = joiSchema.validate(req.body);
-    if (error) {
-      return res.json({ status: 400, message: "missing fields" });
-    }
-    contacts.updateContact(req.params.contactId, req.body);
-    res.json({ message: "Success", status: 200 });
-  } catch (error) {
-    next(error);
+const updateContactController = async (req, res, next) => {
+  const { error } = joiSchema.validate(req.body);
+  if (error) {
+    return res.json({ status: 400, message: "Missing fields" });
   }
+  const result = await service.updateContact(req.params.contactId, req.body);
+  if (!result) res.json({ status: 404 });
+  res.json({ message: "Success", status: 200 });
 };
 
-module.exports = updateContact;
+module.exports = updateContactController;

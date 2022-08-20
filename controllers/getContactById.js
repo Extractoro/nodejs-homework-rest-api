@@ -1,13 +1,10 @@
-const contacts = require("../models/contacts");
+const service = require("../services/contactsService");
 
-const contactById = async (req, res, next) => {
-  try {
-    const result = await contacts.getContactById(req.params.contactId);
-    if (!result) res.json({ status: 404, message: "Uncorrect id" });
-    return res.json({ result, status: 200 });
-  } catch (error) {
-    next(error);
-  }
+const contactByIdController = async (req, res, next) => {
+  const { contactId } = req.params;
+  const contact = await service.getContactById(contactId);
+  if (!contact) res.json({ status: 404, message: "Uncorrect id" });
+  res.json({ contact, status: 200 });
 };
 
-module.exports = contactById;
+module.exports = contactByIdController;
