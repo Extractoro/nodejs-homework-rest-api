@@ -11,6 +11,7 @@ const registrationController = require("./auth/registration");
 const loginController = require("./auth/login");
 const logoutController = require("./auth/logout");
 const getCurrentController = require("./auth/getCurrent");
+const updateSubscriptionController = require("./auth/updateSubscription");
 
 module.exports = {
   getAllContactsController,
@@ -23,4 +24,5 @@ module.exports = {
   loginController,
   logoutController,
   getCurrentController,
+  updateSubscriptionController,
 };

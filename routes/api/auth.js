@@ -11,6 +11,11 @@ router.post(
 
 router.post("/login", controllersWrapper(controllers.loginController));
 
+router.patch(
+  "/:userId",
+  controllersWrapper(controllers.updateSubscriptionController)
+);
+
 router.use(authMiddleware);
 
 router.get("/logout", controllersWrapper(controllers.logoutController));

@@ -46,8 +46,17 @@ const logout = async (userId) => {
   return userLogout;
 };
 
+const updateSubcription = async (userId, body) => {
+  const result = await User.findByIdAndUpdate(userId, body, {
+    new: true,
+  });
+
+  return result;
+};
+
 module.exports = {
   registration,
   login,
   logout,
+  updateSubcription,
 };
