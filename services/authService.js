@@ -1,7 +1,13 @@
-const { User } = require("../schema/userSchema");
+const fs = require("fs");
+const path = require("path");
+const Jimp = require("jimp");
+const { User } = require("../schema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const gravatar = require("gravatar");
+
+const avatarsDir = path.join(__dirname, "..", "public", "avatars");
 
 const registration = async (email, password) => {
   const user = await User.findOne({ email });
@@ -10,9 +16,12 @@ const registration = async (email, password) => {
     throw new Error("Email in use");
   }
 
+  const url = gravatar.url(email, { protocol: "https" }, false);
+
   const userCreation = new User({
     email,
     password,
+    avatarURL: url,
   });
 
   await userCreation.save();
@@ -34,6 +43,7 @@ const login = async (email, password) => {
       _id: user._id,
       email: user.email,
       subscription: user.subscription,
+      avatarURL: user.avatarURL,
     },
     process.env.JWT_SECRET
   );
@@ -54,9 +64,40 @@ const updateSubcription = async (userId, body) => {
   return result;
 };
 
+const uploadAvatar = async (userId, originalName, tempPath) => {
+  const [extension] = originalName.split(".").reverse();
+  const newName = `${userId}.${extension}`;
+  const updatePath = path.join(avatarsDir, newName);
+
+  fs.rename(tempPath, updatePath, (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+
+  const avatarURL = path.join("avatars", newName);
+  const minAvatarURL = path.join("public", "avatars", newName);
+
+  Jimp.read(minAvatarURL, (err, newName) => {
+    if (err) throw err;
+    newName.resize(250, 250).quality(60).write(minAvatarURL);
+  });
+
+  await User.findByIdAndUpdate(
+    userId,
+    { avatarURL: minAvatarURL },
+    {
+      new: true,
+    }
+  );
+
+  return avatarURL;
+};
+
 module.exports = {
   registration,
   login,
   logout,
   updateSubcription,
+  uploadAvatar,
 };

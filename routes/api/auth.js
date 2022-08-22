@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const controllers = require("../../controllers");
 const controllersWrapper = require("../../helpers/controllersWrapper");
-const { authMiddleware } = require("../../middlewares/authMiddleware");
+const { authMiddleware, upload } = require("../../middlewares");
 
 router.post(
   "/registration",
@@ -21,5 +21,11 @@ router.use(authMiddleware);
 router.get("/logout", controllersWrapper(controllers.logoutController));
 
 router.get("/current", controllersWrapper(controllers.getCurrentController));
+
+router.patch(
+  "/users/avatars",
+  upload.single("avatar"),
+  controllersWrapper(controllers.updateAvatarController)
+);
 
 module.exports = router;
