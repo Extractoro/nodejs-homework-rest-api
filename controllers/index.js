@@ -1,9 +1,17 @@
-const getAllContactsController = require("./getAllContacts");
-const getContactsByIdController = require("./getContactById");
-const addContactController = require("./addContact");
-const deleteContactController = require("./deleteContact");
-const updateContactController = require("./updateContact");
-const updateContactStatusController = require("./updateContactStatus");
+// Contacts
+const getAllContactsController = require("./contacts/getAllContacts");
+const getContactsByIdController = require("./contacts/getContactById");
+const addContactController = require("./contacts/addContact");
+const deleteContactController = require("./contacts/deleteContact");
+const updateContactController = require("./contacts/updateContact");
+const updateContactStatusController = require("./contacts/updateContactStatus");
+
+// Auth
+const registrationController = require("./auth/registration");
+const loginController = require("./auth/login");
+const logoutController = require("./auth/logout");
+const getCurrentController = require("./auth/getCurrent");
+const updateSubscriptionController = require("./auth/updateSubscription");
 
 module.exports = {
   getAllContactsController,
@@ -12,4 +20,9 @@ module.exports = {
   deleteContactController,
   updateContactController,
   updateContactStatusController,
+  registrationController,
+  loginController,
+  logoutController,
+  getCurrentController,
+  updateSubscriptionController,
 };

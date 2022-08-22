@@ -1,7 +1,7 @@
 const { Contact } = require("../schema/mongooseSchema");
 
-const getContacts = async () => {
-  const contacts = await Contact.find({});
+const getContacts = async (owner) => {
+  const contacts = await Contact.find({ owner });
   return contacts;
 };
 
@@ -10,8 +10,9 @@ const getContactById = async (id) => {
   return result;
 };
 
-const addContact = async (body) => {
-  const result = await Contact.create(body);
+const addContact = async (body, owner) => {
+  const result = new Contact({ ...body, owner });
+  await result.save();
   return result;
 };
 
