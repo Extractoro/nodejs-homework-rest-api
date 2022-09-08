@@ -6,6 +6,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const gravatar = require("gravatar");
+const sgMail = require("@sendgrid/mail");
+const { v4: uuid } = require("uuid");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const avatarsDir = path.join(__dirname, "..", "public", "avatars");
 
@@ -17,21 +20,73 @@ const registration = async (email, password) => {
   }
 
   const url = gravatar.url(email, { protocol: "https" }, false);
+  const verificationToken = uuid();
 
   const userCreation = new User({
     email,
     password,
     avatarURL: url,
+    verificationToken,
   });
 
   await userCreation.save();
+
+  const msg = {
+    to: email,
+    from: "vadymtytarenkoo@gmail.com",
+    subject: "Confirm your email",
+    text: `Please, <a href="http://localhost:3000/api/auth/registration_confirm/${verificationToken}">confirm</a> your email`,
+    html: `Please, <a href="http://localhost:3000/api/auth/registration_confirm/${verificationToken}">confirm</a> your email`,
+  };
+
+  await sgMail.send(msg);
+};
+
+const registrationConfirm = async (verificationToken) => {
+  const user = await User.findOne({ verificationToken, tokenIsActive: true });
+
+  if (!user) {
+    throw new Error("Invalid or expired verification token!");
+  }
+
+  user.tokenIsActive = false;
+  user.verify = true;
+  await user.save();
+
+  const msg = {
+    to: user.email,
+    from: "vadymtytarenkoo@gmail.com",
+    subject: "You successfully registered!",
+    text: `You successfully registered! Thank you that you with us`,
+    html: `You successfully registered! Thank you that you with us`,
+  };
+
+  await sgMail.send(msg);
+};
+
+const confirmationResend = async (email) => {
+  const user = await User.findOne({ email, verify: false });
+
+  if (!user) {
+    throw new Error("Verification has already been passed");
+  }
+
+  const msg = {
+    to: email,
+    from: "vadymtytarenkoo@gmail.com",
+    subject: "Confirm your email",
+    text: `Please, <a href="http://localhost:3000/api/auth/registration_confirm/${user.verificationToken}">confirm</a> your email`,
+    html: `Please, <a href="http://localhost:3000/api/auth/registration_confirm/${user.verificationToken}">confirm</a> your email`,
+  };
+
+  await sgMail.send(msg);
 };
 
 const login = async (email, password) => {
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email, verify: true });
 
   if (!user) {
-    throw new Error("No user with this email");
+    throw new Error("No user with this email or you do not verify your email");
   }
 
   if (!(await bcrypt.compare(password, user.password))) {
@@ -96,6 +151,8 @@ const uploadAvatar = async (userId, originalName, tempPath) => {
 
 module.exports = {
   registration,
+  registrationConfirm,
+  confirmationResend,
   login,
   logout,
   updateSubcription,

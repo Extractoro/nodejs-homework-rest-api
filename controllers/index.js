@@ -8,6 +8,8 @@ const updateContactStatusController = require("./contacts/updateContactStatus");
 
 // Auth
 const registrationController = require("./auth/registration");
+const registrationConfirmController = require("./auth/registrationConfirm");
+const resendConfirmEmailController = require("./auth/resendConfirmEmail");
 const loginController = require("./auth/login");
 const logoutController = require("./auth/logout");
 const getCurrentController = require("./auth/getCurrent");
@@ -22,6 +24,8 @@ module.exports = {
   updateContactController,
   updateContactStatusController,
   registrationController,
+  registrationConfirmController,
+  resendConfirmEmailController,
   loginController,
   logoutController,
   getCurrentController,
