@@ -12,6 +12,7 @@ const loginController = require("./auth/login");
 const logoutController = require("./auth/logout");
 const getCurrentController = require("./auth/getCurrent");
 const updateSubscriptionController = require("./auth/updateSubscription");
+const updateAvatarController = require("./auth/updateAvatar");
 
 module.exports = {
   getAllContactsController,
@@ -25,4 +26,5 @@ module.exports = {
   logoutController,
   getCurrentController,
   updateSubscriptionController,
+  updateAvatarController,
 };

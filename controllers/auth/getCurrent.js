@@ -1,11 +1,13 @@
 const getCurrent = (req, res) => {
   if (!req.user) {
-    return res.json({ status: 401, message: "Not authorized" });
+    return res.status(401).json({ status: 401, message: "Not authorized" });
   }
 
-  const { email, subscription } = req.user;
+  const { email, subscription, avatarURL } = req.user;
 
-  res.json({ status: 200, res: { email, subscription } });
+  res
+    .status(200)
+    .json({ status: 200, res: { email, subscription, avatarURL } });
 };
 
 module.exports = getCurrent;

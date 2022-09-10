@@ -2,9 +2,13 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const authMiddleware = (req, res, next) => {
-  const [tokenType, token] = req.headers["authorization"].split(" ");
+  const [tokenType, token] = req.headers.authorization.split(" ");
 
   if (!token) {
+    throw new Error("Not authorized");
+  }
+
+  if (!tokenType) {
     throw new Error("Not authorized");
   }
 
@@ -19,6 +23,4 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = {
-  authMiddleware,
-};
+module.exports = authMiddleware;
