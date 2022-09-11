@@ -9,6 +9,16 @@ router.post(
   controllersWrapper(controllers.registrationController)
 );
 
+router.get(
+  "/registration_confirm/:code",
+  controllersWrapper(controllers.registrationConfirmController)
+);
+
+router.post(
+  "/verify_again",
+  controllersWrapper(controllers.resendConfirmEmailController)
+);
+
 router.post("/login", controllersWrapper(controllers.loginController));
 
 router.patch(
